@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>ladybug.sunlighthours API documentation</title>
-    <meta name="description" content="Sunlight hours library for ladybug." />
+    <title>ladybug.comfort.comfortBase API documentation</title>
+    <meta name="description" content="Comfort model object." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1045,11 +1045,12 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#ladybug.sunlighthours.LBSunlightHours">LBSunlightHours</a></span>
+        <span class="class_name"><a href="#ladybug.comfort.comfortBase.ComfortModel">ComfortModel</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#ladybug.sunlighthours.LBSunlightHours.__init__">__init__</a></li>
+    <li class="mono"><a href="#ladybug.comfort.comfortBase.ComfortModel.__init__">__init__</a></li>
+    <li class="mono"><a href="#ladybug.comfort.comfortBase.ComfortModel.buildCustomHeader">buildCustomHeader</a></li>
   </ul>
 
         </li>
@@ -1067,20 +1068,72 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">ladybug.sunlighthours</span> module</h1>
-  <p>Sunlight hours library for ladybug.</p>
+  <h1 class="title"><span class="name">ladybug.comfort.comfortBase</span> module</h1>
+  <p>Comfort model object.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours" class="source">
-    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Sunlight hours library for ladybug.&quot;&quot;&quot;</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.comfort.comfortBase', this);">Show source &equiv;</a></p>
+  <div id="source-ladybug.comfort.comfortBase" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Comfort model object.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
 
 
-<span class="k">class</span> <span class="nc">LBSunlightHours</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Ladybug sunlight hours base class.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">ComfortModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Thermal Comfort Model base class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__calcLength</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isDataAligned</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isRelacNeeded</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerIncl</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__singleVals</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_checkInputList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputValue</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">,</span> <span class="n">inputValName</span><span class="p">,</span> <span class="n">headerValName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check length of the inputValue list and evaluate the contents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">finalVals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">multVal</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputValue</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">headerValName</span> <span class="ow">in</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">finalVals</span> <span class="o">=</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+                    <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__headerIncl</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span> <span class="o">=</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">checkData</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inputValue</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">finalVals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">finalVals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">multVal</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">checkData</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">inputValName</span> <span class="o">+</span> <span class="s2">&quot; input is not of a valid input type.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">finalVals</span> <span class="o">=</span> <span class="n">defaultValue</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">finalVals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">multVal</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">checkData</span><span class="p">,</span> <span class="n">finalVals</span><span class="p">,</span> <span class="n">multVal</span>
+
+    <span class="k">def</span> <span class="nf">buildCustomHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerName</span><span class="p">,</span> <span class="n">headerUnits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds a customized header for a certain data type given the header on the inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newHeadStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span>
+        <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerName</span>
+        <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerUnits</span>
+        <span class="k">return</span> <span class="n">newHeadStr</span>
 </pre></div>
 
   </div>
@@ -1093,19 +1146,70 @@ table {
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="ladybug.sunlighthours.LBSunlightHours" class="name">class <span class="ident">LBSunlightHours</span></p>
+      <p id="ladybug.comfort.comfortBase.ComfortModel" class="name">class <span class="ident">ComfortModel</span></p>
       
   
-    <div class="desc"><p>Ladybug sunlight hours base class.</p></div>
+    <div class="desc"><p>Thermal Comfort Model base class.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours.LBSunlightHours', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours.LBSunlightHours" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LBSunlightHours</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Ladybug sunlight hours base class.&quot;&quot;&quot;</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.comfort.comfortBase.ComfortModel', this);">Show source &equiv;</a></p>
+  <div id="source-ladybug.comfort.comfortBase.ComfortModel" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ComfortModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Thermal Comfort Model base class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__calcLength</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isDataAligned</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__isRelacNeeded</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerIncl</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__singleVals</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">_checkInputList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputValue</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">,</span> <span class="n">inputValName</span><span class="p">,</span> <span class="n">headerValName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check length of the inputValue list and evaluate the contents.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">finalVals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">multVal</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputValue</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">headerValName</span> <span class="ow">in</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">finalVals</span> <span class="o">=</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span>
+                    <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__headerIncl</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span> <span class="o">=</span> <span class="n">inputValue</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">checkData</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inputValue</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">finalVals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">checkData</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">finalVals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">multVal</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">checkData</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">inputValName</span> <span class="o">+</span> <span class="s2">&quot; input is not of a valid input type.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">checkData</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">finalVals</span> <span class="o">=</span> <span class="n">defaultValue</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">finalVals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">multVal</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="n">checkData</span><span class="p">,</span> <span class="n">finalVals</span><span class="p">,</span> <span class="n">multVal</span>
+
+    <span class="k">def</span> <span class="nf">buildCustomHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerName</span><span class="p">,</span> <span class="n">headerUnits</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds a customized header for a certain data type given the header on the inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newHeadStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span>
+        <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerName</span>
+        <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerUnits</span>
+        <span class="k">return</span> <span class="n">newHeadStr</span>
 </pre></div>
 
   </div>
@@ -1115,26 +1219,57 @@ table {
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#ladybug.sunlighthours.LBSunlightHours">LBSunlightHours</a></li>
+          <li><a href="#ladybug.comfort.comfortBase.ComfortModel">ComfortModel</a></li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="ladybug.sunlighthours.LBSunlightHours.__init__">
+    <div class="name def" id="ladybug.comfort.comfortBase.ComfortModel.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Init class.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours.LBSunlightHours.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours.LBSunlightHours.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.comfort.comfortBase.ComfortModel.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-ladybug.comfort.comfortBase.ComfortModel.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-    <span class="k">pass</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__calcLength</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__isDataAligned</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__isRelacNeeded</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__headerIncl</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__singleVals</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="ladybug.comfort.comfortBase.ComfortModel.buildCustomHeader">
+    <p>def <span class="ident">buildCustomHeader</span>(</p><p>self, headerName, headerUnits)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Builds a customized header for a certain data type given the header on the inputs.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.comfort.comfortBase.ComfortModel.buildCustomHeader', this);">Show source &equiv;</a></p>
+  <div id="source-ladybug.comfort.comfortBase.ComfortModel.buildCustomHeader" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">buildCustomHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">headerName</span><span class="p">,</span> <span class="n">headerUnits</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a customized header for a certain data type given the header on the inputs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">newHeadStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__headerStr</span>
+    <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerName</span>
+    <span class="n">newHeadStr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">headerUnits</span>
+    <span class="k">return</span> <span class="n">newHeadStr</span>
 </pre></div>
 
   </div>

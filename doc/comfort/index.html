@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>ladybug.sunlighthours API documentation</title>
-    <meta name="description" content="Sunlight hours library for ladybug." />
+    <title>ladybug.comfort API documentation</title>
+    <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1042,20 +1042,13 @@ table {
     <ul id="index">
 
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#ladybug.sunlighthours.LBSunlightHours">LBSunlightHours</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#ladybug.sunlighthours.LBSunlightHours.__init__">__init__</a></li>
-  </ul>
 
-        </li>
+    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
+      <ul>
+        <li class="mono"><a href="comfortBase.m.html">ladybug.comfort.comfortBase</a></li>
+        <li class="mono"><a href="pmv.m.html">ladybug.comfort.pmv</a></li>
       </ul>
     </li>
-
     </ul>
   </div>
 
@@ -1067,20 +1060,14 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">ladybug.sunlighthours</span> module</h1>
-  <p>Sunlight hours library for ladybug.</p>
+  <h1 class="title"><span class="name">ladybug.comfort</span> module</h1>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours" class="source">
-    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Sunlight hours library for ladybug.&quot;&quot;&quot;</span>
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.comfort', this);">Show source &equiv;</a></p>
+  <div id="source-ladybug.comfort" class="source">
+    <div class="codehilite"><pre><span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pmv&quot;</span><span class="p">]</span>
 
-
-<span class="k">class</span> <span class="nc">LBSunlightHours</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Ladybug sunlight hours base class.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
+<span class="kn">import</span> <span class="nn">pmv</span>
 </pre></div>
 
   </div>
@@ -1090,61 +1077,22 @@ table {
   <section id="section-items">
 
 
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
+
+    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p id="ladybug.sunlighthours.LBSunlightHours" class="name">class <span class="ident">LBSunlightHours</span></p>
+      <p class="name"><a href="comfortBase.m.html">ladybug.comfort.comfortBase</a></p>
       
   
-    <div class="desc"><p>Ladybug sunlight hours base class.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours.LBSunlightHours', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours.LBSunlightHours" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">LBSunlightHours</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Ladybug sunlight hours base class.&quot;&quot;&quot;</span>
+    <div class="desc"><p>Comfort model object.</p></div>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-        <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#ladybug.sunlighthours.LBSunlightHours">LBSunlightHours</a></li>
-          <li>__builtin__.object</li>
-          </ul>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="ladybug.sunlighthours.LBSunlightHours.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Init class.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-ladybug.sunlighthours.LBSunlightHours.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-ladybug.sunlighthours.LBSunlightHours.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Init class.&quot;&quot;&quot;</span>
-    <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
       </div>
-      </div>
+      <div class="item">
+      <p class="name"><a href="pmv.m.html">ladybug.comfort.pmv</a></p>
+      
+  
+    <div class="desc"><p>PMV Comfort object.</p></div>
 
+      </div>
   </section>
 
     </article>
